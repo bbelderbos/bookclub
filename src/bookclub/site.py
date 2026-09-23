@@ -10,6 +10,7 @@ from bookclub.store import load_books, read_guide
 env = Environment(loader=PackageLoader("bookclub"), autoescape=select_autoescape())
 JOIN_URL = os.environ.get("BOOKCLUB_JOIN_URL", "https://belderbos.dev")
 env.filters["day"] = lambda d: f"{d:%a %-d %b %Y}"
+env.filters["short_day"] = lambda d: f"{d:%-d %b}"
 
 
 def _write(path: Path, html: str) -> None:
@@ -21,7 +22,8 @@ def build_site(books_dir: Path, out: Path, today: date) -> None:
     """Render the home page, a schedule per book, and a guide per released week."""
     books = load_books(books_dir)
     _write(
-        out / "index.html", env.get_template("index.html").render(books=books, join_url=JOIN_URL)
+        out / "index.html",
+        env.get_template("index.html").render(books=books, today=today, join_url=JOIN_URL),
     )
     for book in books:
         released = book.released_weeks(today)
@@ -29,13 +31,10 @@ def build_site(books_dir: Path, out: Path, today: date) -> None:
         _write(
             out / book.slug / "index.html",
             env.get_template("book.html").render(
-                book=book,
-                released={w.number for w in released},
-                summaries=summaries,
-                join_url=JOIN_URL,
+                book=book, today=today, summaries=summaries, join_url=JOIN_URL
             ),
         )
-        for week in released:
+        for i, week in enumerate(released):
             meta, body = read_guide(books_dir, book, week)
             _write(
                 out / book.slug / week.slug / "index.html",
@@ -44,6 +43,8 @@ def build_site(books_dir: Path, out: Path, today: date) -> None:
                     week=week,
                     summary=meta.get("summary"),
                     body=markdown.markdown(body),
+                    previous=released[i - 1] if i > 0 else None,
+                    next=released[i + 1] if i + 1 < len(released) else None,
                     join_url=JOIN_URL,
                 ),
             )

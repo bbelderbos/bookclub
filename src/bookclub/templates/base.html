@@ -4,27 +4,75 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}Book Club{% endblock %}</title>
+<script>
+  try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --fg: #1f2328; --muted: #59636e; --bg: #fff; --accent: #0969da; --card: #f6f8fa; }
-  @media (prefers-color-scheme: dark) {
-    :root { --fg: #e6edf3; --muted: #9198a1; --bg: #0d1117; --accent: #4493f8; --card: #151b23; }
+  :root {
+    --bg: #faf7f2; --fg: #1c1917; --muted: #6b645c; --card: #ffffff; --line: #e7e1d8;
+    --accent: #c2410c; --accent-soft: #fdebdd; --done: #15803d; --done-soft: #dcfce7;
+    --shadow: 0 1px 2px rgb(28 25 23 / .06), 0 4px 16px rgb(28 25 23 / .05);
+    color-scheme: light;
   }
-  body { font: 18px/1.6 system-ui, sans-serif; color: var(--fg); background: var(--bg); margin: 0; }
-  main { max-width: 42rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
-  a { color: var(--accent); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14120f; --fg: #ede8e1; --muted: #a59d93; --card: #1d1a16; --line: #2e2a24;
+      --accent: #fb923c; --accent-soft: #3a2414; --done: #4ade80; --done-soft: #14301f;
+      --shadow: none; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14120f; --fg: #ede8e1; --muted: #a59d93; --card: #1d1a16; --line: #2e2a24;
+    --accent: #fb923c; --accent-soft: #3a2414; --done: #4ade80; --done-soft: #14301f;
+    --shadow: none; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { font: 17px/1.7 Inter, system-ui, sans-serif; color: var(--fg); background: var(--bg); margin: 0; }
+  h1, h2, h3 { font-family: Fraunces, Georgia, serif; line-height: 1.2; }
+  h1 { font-size: clamp(2rem, 5vw, 2.75rem); margin: .25rem 0 .75rem; letter-spacing: -.01em; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 0 16px; }
+  header { border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 3.5rem; }
+  .brand { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 1.15rem; color: var(--fg); text-decoration: none; }
+  .theme { background: none; border: 1px solid var(--line); border-radius: 999px; color: var(--fg); padding: .3rem .7rem; cursor: pointer; font: inherit; font-size: .85rem; }
+  main { padding: 2.5rem 0 4rem; }
+  .kicker { text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; font-weight: 600; color: var(--accent); }
   .muted { color: var(--muted); }
-  .card { background: var(--card); border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
-  .cta { background: var(--card); border-left: 4px solid var(--accent); padding: 1rem 1.25rem; margin-top: 3rem; }
-  table { width: 100%; border-collapse: collapse; }
-  td { padding: .5rem .25rem; border-bottom: 1px solid var(--card); vertical-align: top; }
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.5rem; padding: 0; list-style: none; }
+  .chips li { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: .15rem .75rem; font-size: .85rem; }
+  .card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1rem 0; box-shadow: var(--shadow); color: inherit; text-decoration: none; }
+  a.card:hover { border-color: var(--accent); }
+  .progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden; margin: .5rem 0 .25rem; }
+  .progress span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+  .cta { background: var(--accent-soft); border-radius: 12px; padding: 1.25rem 1.5rem; margin-top: 3rem; }
+  footer { border-top: 1px solid var(--line); padding: 1.5rem 0 3rem; font-size: .85rem; }
 </style>
 </head>
 <body>
-<main>
+<header>
+  <div class="wrap">
+    <a class="brand" href="{{ root }}">📚 Book Club</a>
+    <button class="theme" type="button" aria-label="Toggle dark mode">◐ Theme</button>
+  </div>
+</header>
+<main class="wrap">
 {% block content %}{% endblock %}
 <div class="cta">
-  Reading along? <a href="{{ join_url }}">Join the club</a> to discuss each week's prompts with other developers.
+  <strong>Reading along?</strong> <a href="{{ join_url }}">Join the club</a> to discuss each week's prompts with other developers.
 </div>
 </main>
+<footer><div class="wrap muted">A weekly developer book club by <a href="https://belderbos.dev">belderbos.dev</a></div></footer>
+<script>
+  document.querySelector(".theme").addEventListener("click", () => {
+    const root = document.documentElement;
+    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark ? "light" : "dark";
+    try { localStorage.setItem("theme", root.dataset.theme); } catch {}
+  });
+</script>
 </body>
 </html>

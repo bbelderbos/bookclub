@@ -31,3 +31,12 @@ def test_released_weeks_only_include_those_on_or_before_today():
 def test_week_releasing_on_a_given_day():
     assert BOOK.week_releasing_on(date(2026, 10, 12)) == BOOK.weeks[1]
     assert BOOK.week_releasing_on(date(2026, 10, 13)) is None
+
+
+def test_week_status_is_done_once_due_current_while_open_and_upcoming_before_release():
+    week1, week2, week3 = BOOK.weeks
+    today = date(2026, 10, 12)
+
+    assert week1.status(today) == "done"
+    assert week2.status(today) == "current"
+    assert week3.status(today) == "upcoming"

@@ -1,11 +1,16 @@
 {% extends "base.html" %}
+{% set root = "./" %}
 {% block content %}
+<p class="kicker">Read together, one chapter a week</p>
 <h1>Book Club</h1>
-<p class="muted">One chapter a week, a reading guide per chapter, and discussion in Slack.</p>
+<p class="muted">Each week gets a reading guide with key ideas, reflection prompts, and a hands-on exercise. The discussion happens in Slack.</p>
 {% for book in books %}
-<div class="card">
-  <h2><a href="{{ book.slug }}/">{{ book.title }}</a></h2>
-  <p class="muted">{{ book.author }} · starts {{ book.start|day }} · {{ book.weeks|length }} weeks</p>
-</div>
+{% set ns = namespace(done=0) %}{% for w in book.weeks %}{% if w.status(today) == "done" %}{% set ns.done = ns.done + 1 %}{% endif %}{% endfor %}
+<a class="card" href="{{ book.slug }}/">
+  <h2 style="margin:.25rem 0">{{ book.title }}</h2>
+  <div class="muted">{{ book.author }} · starts {{ book.start|day }}</div>
+  <div class="progress"><span style="width: {{ (100 * ns.done / book.weeks|length)|round|int }}%"></span></div>
+  <div class="muted" style="font-size:.85rem">{{ ns.done }} of {{ book.weeks|length }} weeks done</div>
+</a>
 {% endfor %}
 {% endblock %}

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import date, timedelta
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -20,6 +21,11 @@ class Week:
     @property
     def due(self) -> date:
         return self.release + timedelta(weeks=1)
+
+    def status(self, today: date) -> Literal["done", "current", "upcoming"]:
+        if today >= self.due:
+            return "done"
+        return "current" if today >= self.release else "upcoming"
 
     @property
     def slug(self) -> str:

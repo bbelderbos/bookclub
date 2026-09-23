@@ -1,19 +1,45 @@
 {% extends "base.html" %}
-{% block title %}{{ book.title }} Book Club{% endblock %}
+{% set root = "../" %}
+{% block title %}{{ book.title }} · Book Club{% endblock %}
 {% block content %}
-<p><a href="../">All books</a></p>
+{% set ns = namespace(done=0) %}{% for w in book.weeks %}{% if w.status(today) == "done" %}{% set ns.done = ns.done + 1 %}{% endif %}{% endfor %}
+<style>
+  .timeline { list-style: none; padding: 0; margin: 2rem 0; }
+  .week { display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .num { width: 2.5rem; height: 2.5rem; border-radius: 50%; display: grid; place-items: center; font-weight: 600; border: 2px solid var(--line); color: var(--muted); }
+  .week h3 { margin: 0; font-size: 1.15rem; }
+  .week h3 a { color: var(--fg); text-decoration: none; }
+  .week h3 a:hover { color: var(--accent); }
+  .meta { font-size: .85rem; }
+  .badge { display: inline-block; font-family: Inter, system-ui, sans-serif; font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; border-radius: 999px; padding: .1rem .55rem; margin-left: .4rem; vertical-align: middle; }
+  .current .num { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .current .badge { background: var(--accent-soft); color: var(--accent); }
+  .current { background: linear-gradient(90deg, var(--accent-soft), transparent 70%); border-radius: 12px; padding-left: .75rem; margin-left: -.75rem; }
+  .done .num { background: var(--done-soft); border-color: var(--done); color: var(--done); }
+  .done .badge { background: var(--done-soft); color: var(--done); }
+  .done h3 a { color: var(--muted); }
+  .upcoming { opacity: .6; }
+  .upcoming .badge { border: 1px solid var(--line); color: var(--muted); }
+</style>
+<p class="kicker">{{ book.weeks|length }} weeks · {{ book.start|short_day }} – {{ book.weeks[-1].due|short_day }}</p>
 <h1>{{ book.title }}</h1>
 <p class="muted">{{ book.author }} · <a href="{{ book.source_url }}">Get the book</a></p>
-<table>
+<div class="progress"><span style="width: {{ (100 * ns.done / book.weeks|length)|round|int }}%"></span></div>
+<div class="muted meta">{{ ns.done }} of {{ book.weeks|length }} weeks done</div>
+<ol class="timeline">
 {% for week in book.weeks %}
-  <tr>
-    <td>Week {{ week.number }}</td>
-    <td>
-      {% if week.number in released %}<a href="{{ week.slug }}/">{{ week.chapter.title }}</a>{% else %}{{ week.chapter.title }}{% endif %}
-      {% if summaries.get(week.number) %}<br><span class="muted">{{ summaries[week.number] }}</span>{% endif %}
-    </td>
-    <td class="muted">Due {{ week.due|day }}</td>
-  </tr>
+{% set status = week.status(today) %}
+  <li class="week {{ status }}">
+    <div class="num">{% if status == "done" %}✓{% else %}{{ week.number }}{% endif %}</div>
+    <div>
+      <h3>
+        {% if status != "upcoming" %}<a href="{{ week.slug }}/">{{ week.chapter.title }}</a>{% else %}{{ week.chapter.title }}{% endif %}
+        {% if status == "current" %}<span class="badge">This week</span>{% elif status == "done" %}<span class="badge">Done</span>{% else %}<span class="badge">Opens {{ week.release|short_day }}</span>{% endif %}
+      </h3>
+      {% if summaries.get(week.number) %}<div>{{ summaries[week.number] }}</div>{% endif %}
+      <div class="muted meta">{{ week.chapter.topics|length }} topics · due {{ week.due|day }}</div>
+    </div>
+  </li>
 {% endfor %}
-</table>
+</ol>
 {% endblock %}

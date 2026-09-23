@@ -64,3 +64,29 @@ def test_build_publishes_only_released_weeks(tmp_path):
     schedule = (out / "tpp" / "index.html").read_text()
     assert "A Pragmatic Approach" in schedule
     assert "The Pragmatic Programmer" in (out / "index.html").read_text()
+
+
+def test_schedule_marks_each_week_done_current_or_upcoming(tmp_path):
+    books_dir, out = tmp_path / "books", tmp_path / "_site"
+    make_book(books_dir)
+
+    build_site(books_dir, out, today=date(2026, 10, 12))
+
+    schedule = (out / "tpp" / "index.html").read_text()
+    assert 'class="week done"' in schedule
+    assert 'class="week current"' in schedule
+    assert "This week" in schedule
+    assert "1 of 2 weeks done" in schedule
+
+
+def test_week_pages_link_to_neighbouring_released_weeks_only(tmp_path):
+    books_dir, out = tmp_path / "books", tmp_path / "_site"
+    make_book(books_dir)
+
+    build_site(books_dir, out, today=date(2026, 10, 12))
+
+    week1 = (out / "tpp" / "week-01" / "index.html").read_text()
+    week2 = (out / "tpp" / "week-02" / "index.html").read_text()
+    assert 'href="../week-02/"' in week1
+    assert 'href="../week-01/"' in week2
+    assert 'href="../week-03/"' not in week2
