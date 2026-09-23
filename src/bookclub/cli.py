@@ -10,7 +10,7 @@ from bookclub.store import add_book, load_books, read_guide
 from bookclub.toc import fetch_toc
 
 BOOKS_DIR = Path("books")
-TODAY = datetime.now(ZoneInfo(os.environ.get("BOOKCLUB_TZ", "UTC"))).date()
+TODAY = datetime.now(ZoneInfo(os.environ.get("BOOKCLUB_TZ") or "UTC")).date()
 
 
 def cmd_add(args: argparse.Namespace) -> None:
