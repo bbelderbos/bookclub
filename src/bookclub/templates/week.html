@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Week {{ week.number }}: {{ week.chapter.title }} · {{ book.title }}{% endblock %}
+{% block content %}
+<p><a href="../">{{ book.title }} schedule</a></p>
+<h1>Week {{ week.number }}: {{ week.chapter.title }}</h1>
+<p class="muted">Due {{ week.due|day }}</p>
+{% if summary %}<p><strong>{{ summary }}</strong></p>{% endif %}
+{{ body|safe }}
+{% endblock %}

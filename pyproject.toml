@@ -1,0 +1,34 @@
+[project]
+name = "bookclub"
+version = "0.1.0"
+description = "Weekly book club: scraped TOC, reading guides, Slack prompts"
+readme = "README.md"
+authors = [
+    { name = "Bob Belderbos", email = "bobbelderbos@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "httpx>=0.28.1",
+    "jinja2>=3.1.6",
+    "markdown>=3.10.3",
+    "pydantic>=2.13.5",
+    "pyyaml>=6.0.3",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.8",
+    "ty>=0.0.83",
+]
+
+[project.scripts]
+bookclub = "bookclub.cli:main"
+
+[tool.ruff]
+line-length = 100

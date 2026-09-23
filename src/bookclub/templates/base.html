@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Book Club{% endblock %}</title>
+<style>
+  :root { --fg: #1f2328; --muted: #59636e; --bg: #fff; --accent: #0969da; --card: #f6f8fa; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fg: #e6edf3; --muted: #9198a1; --bg: #0d1117; --accent: #4493f8; --card: #151b23; }
+  }
+  body { font: 18px/1.6 system-ui, sans-serif; color: var(--fg); background: var(--bg); margin: 0; }
+  main { max-width: 42rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
+  a { color: var(--accent); }
+  .muted { color: var(--muted); }
+  .card { background: var(--card); border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+  .cta { background: var(--card); border-left: 4px solid var(--accent); padding: 1rem 1.25rem; margin-top: 3rem; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: .5rem .25rem; border-bottom: 1px solid var(--card); vertical-align: top; }
+</style>
+</head>
+<body>
+<main>
+{% block content %}{% endblock %}
+<div class="cta">
+  Reading along? <a href="{{ join_url }}">Join the club</a> to discuss each week's prompts with other developers.
+</div>
+</main>
+</body>
+</html>

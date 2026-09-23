@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Book Club</h1>
+<p class="muted">One chapter a week, a reading guide per chapter, and discussion in Slack.</p>
+{% for book in books %}
+<div class="card">
+  <h2><a href="{{ book.slug }}/">{{ book.title }}</a></h2>
+  <p class="muted">{{ book.author }} · starts {{ book.start|day }} · {{ book.weeks|length }} weeks</p>
+</div>
+{% endfor %}
+{% endblock %}

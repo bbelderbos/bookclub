@@ -1,0 +1,77 @@
+slug: pragmatic-programmer
+title: The Pragmatic Programmer, 20th Anniversary Edition
+author: David Thomas & Andrew Hunt
+source_url: https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/
+start: '2026-10-05'
+chapters:
+- title: A Pragmatic Philosophy
+  topics:
+  - It’s Your Life
+  - The Cat Ate My Source Code
+  - Software Entropy
+  - Stone Soup and Boiled Frogs
+  - Good-Enough Software
+  - Your Knowledge Portfolio
+  - Communicate!
+- title: A Pragmatic Approach
+  topics:
+  - The Essence of Good Design
+  - DRY—The Evils of Duplication
+  - Orthogonality
+  - Reversibility
+  - Tracer Bullets
+  - Prototypes and Post-it Notes
+  - Domain Languages
+  - Estimating
+- title: The Basic Tools
+  topics:
+  - The Power of Plain Text
+  - Shell Games
+  - Power Editing
+  - Version Control
+  - Debugging
+  - Text Manipulation
+  - Engineering Daybooks
+- title: Pragmatic Paranoia
+  topics:
+  - Design by Contract
+  - Dead Programs Tell No Lies
+  - Assertive Programming
+  - How to Balance Resources
+  - Don’t Outrun Your Headlights
+- title: Bend, or Break
+  topics:
+  - Decoupling
+  - Juggling the Real World
+  - Transforming Programming
+  - Inheritance Tax
+  - Configuration
+- title: Concurrency
+  topics:
+  - Breaking Temporal Coupling
+  - Shared State Is Incorrect State
+  - Actors and Processes
+  - Blackboards
+- title: While You Are Coding
+  topics:
+  - Listen to Your Lizard Brain
+  - Programming by Coincidence
+  - Algorithm Speed
+  - Refactoring
+  - Test to Code
+  - Property-Based Testing
+  - Stay Safe Out There
+  - Naming Things
+- title: Before the Project
+  topics:
+  - The Requirements Pit
+  - Solving Impossible Puzzles
+  - Working Together
+  - The Essence of Agility
+- title: Pragmatic Projects
+  topics:
+  - Pragmatic Teams
+  - Coconuts Don’t Cut It
+  - Pragmatic Starter Kit
+  - Delight Your Users
+  - Pride and Prejudice

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} Book Club{% endblock %}
+{% block content %}
+<p><a href="../">All books</a></p>
+<h1>{{ book.title }}</h1>
+<p class="muted">{{ book.author }} · <a href="{{ book.source_url }}">Get the book</a></p>
+<table>
+{% for week in book.weeks %}
+  <tr>
+    <td>Week {{ week.number }}</td>
+    <td>
+      {% if week.number in released %}<a href="{{ week.slug }}/">{{ week.chapter.title }}</a>{% else %}{{ week.chapter.title }}{% endif %}
+      {% if summaries.get(week.number) %}<br><span class="muted">{{ summaries[week.number] }}</span>{% endif %}
+    </td>
+    <td class="muted">Due {{ week.due|day }}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}
