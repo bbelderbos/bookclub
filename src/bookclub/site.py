@@ -8,7 +8,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from bookclub.store import load_books, read_guide
 
 env = Environment(loader=PackageLoader("bookclub"), autoescape=select_autoescape())
-JOIN_URL = os.environ.get("BOOKCLUB_JOIN_URL") or "https://belderbos.dev/bookclub/"
+JOIN_URL = os.environ.get("BOOKCLUB_JOIN_URL") or "https://belderbos.dev/community/"
 env.filters["day"] = lambda d: f"{d:%a %-d %b %Y}"
 env.filters["short_day"] = lambda d: f"{d:%-d %b}"
 

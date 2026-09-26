@@ -20,4 +20,4 @@ def test_build_falls_back_to_defaults_when_ci_passes_empty_variables(tmp_path):
     )
 
     assert result.returncode == 0, result.stderr
-    assert 'href="https://belderbos.dev/bookclub/"' in (tmp_path / "index.html").read_text()
+    assert 'href="https://belderbos.dev/community/"' in (tmp_path / "index.html").read_text()
