@@ -90,3 +90,11 @@ def test_week_pages_link_to_neighbouring_released_weeks_only(tmp_path):
     assert 'href="../week-02/"' in week1
     assert 'href="../week-01/"' in week2
     assert 'href="../week-03/"' not in week2
+
+
+def test_home_page_embeds_the_intro_video(tmp_path):
+    books_dir, out = tmp_path / "books", tmp_path / "site"
+    make_book(books_dir)
+    build_site(books_dir, out, today=date(2026, 10, 6))
+
+    assert "youtube-nocookie.com/embed/G1wSJnGRaKQ" in (out / "index.html").read_text()
