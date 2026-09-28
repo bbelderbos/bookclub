@@ -4,6 +4,9 @@
 <p class="kicker">Read together, one chapter a week</p>
 <h1>Book Club</h1>
 <p class="muted">Each week gets a reading guide with key ideas, reflection prompts, and a hands-on exercise. The discussion happens in Slack.</p>
+<div class="video">
+  <iframe src="https://www.youtube-nocookie.com/embed/G1wSJnGRaKQ" title="Why this book club and how it works" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+</div>
 {% for book in books %}
 {% set ns = namespace(done=0) %}{% for w in book.weeks %}{% if w.status(today) == "done" %}{% set ns.done = ns.done + 1 %}{% endif %}{% endfor %}
 <a class="card" href="{{ book.slug }}/">
