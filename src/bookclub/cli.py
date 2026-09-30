@@ -54,6 +54,14 @@ def cmd_slack(args: argparse.Namespace) -> None:
                 post(os.environ["SLACK_BOT_TOKEN"], os.environ["SLACK_CHANNEL"], message)
 
 
+def cmd_post(args: argparse.Namespace) -> None:
+    """Post a one-off message, e.g. a reminder, to the book club channel."""
+    if args.dry_run:
+        print(args.text)
+    else:
+        post(os.environ["SLACK_BOT_TOKEN"], os.environ["SLACK_CHANNEL"], args.text)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="bookclub")
     sub = parser.add_subparsers(required=True)
@@ -76,6 +84,11 @@ def main() -> None:
     slack.add_argument("--today", type=date.fromisoformat, default=TODAY)
     slack.add_argument("--dry-run", action="store_true")
     slack.set_defaults(func=cmd_slack)
+
+    one_off = sub.add_parser("post", help="post a one-off message to Slack")
+    one_off.add_argument("text")
+    one_off.add_argument("--dry-run", action="store_true")
+    one_off.set_defaults(func=cmd_post)
 
     args = parser.parse_args()
     args.func(args)

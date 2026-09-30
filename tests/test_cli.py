@@ -48,3 +48,24 @@ def test_slack_dry_run_posts_the_second_question_on_wednesday():
     assert result.returncode == 0, result.stderr
     assert result.stdout.strip().startswith(":speech_balloon: *Q2.*")
     assert "Week 1" not in result.stdout
+
+
+def test_post_dry_run_prints_the_text_without_posting():
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "from bookclub.cli import main; main()",
+            "post",
+            "hello club",
+            "--dry-run",
+        ],
+        cwd=ROOT,
+        env={k: v for k, v in os.environ.items() if not k.startswith("SLACK_")},
+        capture_output=True,
+        check=False,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == "hello club"

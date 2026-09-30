@@ -1,0 +1,21 @@
+name: announce
+
+on:
+  workflow_dispatch:
+    inputs:
+      text:
+        description: Message to post to the book club channel
+        required: true
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      # Passed via env, not interpolated into the script, so the text can't inject shell.
+      - run: uv run bookclub post "$TEXT"
+        env:
+          TEXT: ${{ inputs.text }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
