@@ -23,7 +23,7 @@ By the end of this week you'll be able to:
 
 1. Find a `try/except` (or equivalent) in your code that swallows an error. What would happen if it crashed instead?
 2. Share a time from your own work where this chapter's lessons would have helped, or where you learned them the hard way.
-3. What's one thing from this chapter you'll try in your own work? When you have, share how it went in #wins, and link a gist or repo if you've got one.
+3. What's one thing from this chapter you'll try in your own work? When you have, share how it went in [#wins](https://belderbosdev.slack.com/archives/C0ALAHC8AUE), and link a gist or repo if you've got one.
 
 ## Put it into practice
 

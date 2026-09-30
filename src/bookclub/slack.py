@@ -5,6 +5,7 @@ import httpx
 
 REFLECT_SECTION = re.compile(r"^## Reflect.*?$(.*?)(?=^## |\Z)", re.MULTILINE | re.DOTALL)
 NUMBERED_ITEM = re.compile(r"^\d+\.\s+(.+)$", re.MULTILINE)
+MARKDOWN_LINK = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 # Questions trickle out across the week (Mon, Wed, Fri for a Monday release) so the channel isn't flooded.
 PROMPT_DAYS = (0, 2, 4)
 
@@ -20,7 +21,7 @@ def build_messages(
     )
     section = REFLECT_SECTION.search(guide)
     prompts = NUMBERED_ITEM.findall(section.group(1)) if section else []
-    return announcement, [p.strip() for p in prompts]
+    return announcement, [MARKDOWN_LINK.sub(r"<\2|\1>", p.strip()) for p in prompts]
 
 
 def post(token: str, channel: str, text: str) -> None:

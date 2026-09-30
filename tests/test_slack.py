@@ -51,3 +51,20 @@ def test_release_day_posts_announcement_and_first_question_then_one_question_eve
     assert messages_for_day("hello", prompts, days_since_release=4) == [":speech_balloon: *Q3.* c?"]
     assert messages_for_day("hello", prompts, days_since_release=1) == []
     assert messages_for_day("hello", prompts, days_since_release=6) == []
+
+
+def test_markdown_links_in_prompts_become_slack_links():
+    guide = (
+        "## Reflect & discuss\n\n1. Share it in [#wins](https://example.slack.com/archives/C1).\n"
+    )
+
+    _, prompts = build_messages(
+        book_title="B",
+        week_number=1,
+        chapter_title="C",
+        due=date(2026, 10, 12),
+        url="u",
+        guide=guide,
+    )
+
+    assert prompts == ["Share it in <https://example.slack.com/archives/C1|#wins>."]
