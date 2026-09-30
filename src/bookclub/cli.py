@@ -5,7 +5,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from bookclub.site import build_site
-from bookclub.slack import build_messages, post_week
+from bookclub.slack import build_messages, messages_for_day, post
 from bookclub.store import add_book, load_books, read_guide
 from bookclub.toc import fetch_toc
 
@@ -32,9 +32,9 @@ def cmd_build(args: argparse.Namespace) -> None:
 
 
 def cmd_slack(args: argparse.Namespace) -> None:
-    """Announce every book whose next week releases today; a no-op on other days."""
+    """Post today's announcement and questions for every book's current week; a no-op on quiet days."""
     for book in load_books(BOOKS_DIR):
-        week = book.week_releasing_on(args.today)
+        week = next((w for w in book.weeks if w.status(args.today) == "current"), None)
         if week is None:
             continue
         _, guide = read_guide(BOOKS_DIR, book, week)
@@ -46,12 +46,12 @@ def cmd_slack(args: argparse.Namespace) -> None:
             url=f"{args.site_url.rstrip('/')}/{book.slug}/{week.slug}/",
             guide=guide,
         )
+        messages = messages_for_day(announcement, prompts, (args.today - week.release).days)
         if args.dry_run:
-            print(announcement, *prompts, sep="\n\n")
+            print(*messages, sep="\n\n")
         else:
-            post_week(
-                os.environ["SLACK_BOT_TOKEN"], os.environ["SLACK_CHANNEL"], announcement, prompts
-            )
+            for message in messages:
+                post(os.environ["SLACK_BOT_TOKEN"], os.environ["SLACK_CHANNEL"], message)
 
 
 def main() -> None:

@@ -51,6 +51,3 @@ class Book(BaseModel):
 
     def released_weeks(self, today: date) -> list[Week]:
         return [w for w in self.weeks if w.release <= today]
-
-    def week_releasing_on(self, day: date) -> Week | None:
-        return next((w for w in self.weeks if w.release == day), None)
