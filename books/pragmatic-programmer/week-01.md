@@ -23,16 +23,9 @@ By the end of this week you'll be able to:
 
 ## Reflect & discuss
 
-### On your own
-
-1. Think of the last time something you owned broke. Did you bring options or explanations?
-2. Name one broken window in a codebase you work on. What would it take to board it up this week?
-3. What did you invest in your knowledge portfolio in the last three months? What is overweighted?
-
-### With your team
-
-1. Where does your team tolerate broken windows, and who decides they're acceptable?
-2. How do you decide "good enough" today? Who is missing from that conversation?
+1. Name one broken window in a codebase you work on. What would it take to board it up this week?
+2. Share a time from your own work where this chapter's lessons would have helped, or where you learned them the hard way.
+3. What's one thing from this chapter you'll try in your own work? When you have, share how it went in [#wins](https://belderbosdev.slack.com/archives/C0ALAHC8AUE), and link a gist or repo if you've got one.
 
 ## Put it into practice
 

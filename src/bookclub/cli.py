@@ -5,7 +5,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from bookclub.site import build_site
-from bookclub.slack import build_messages, post_week
+from bookclub.slack import build_messages, messages_for_day, post
 from bookclub.store import add_book, load_books, read_guide
 from bookclub.toc import fetch_toc
 
@@ -32,9 +32,9 @@ def cmd_build(args: argparse.Namespace) -> None:
 
 
 def cmd_slack(args: argparse.Namespace) -> None:
-    """Announce every book whose next week releases today; a no-op on other days."""
+    """Post today's announcement and questions for every book's current week; a no-op on quiet days."""
     for book in load_books(BOOKS_DIR):
-        week = book.week_releasing_on(args.today)
+        week = next((w for w in book.weeks if w.status(args.today) == "current"), None)
         if week is None:
             continue
         _, guide = read_guide(BOOKS_DIR, book, week)
@@ -46,12 +46,20 @@ def cmd_slack(args: argparse.Namespace) -> None:
             url=f"{args.site_url.rstrip('/')}/{book.slug}/{week.slug}/",
             guide=guide,
         )
+        messages = messages_for_day(announcement, prompts, (args.today - week.release).days)
         if args.dry_run:
-            print(announcement, *prompts, sep="\n\n")
+            print(*messages, sep="\n\n")
         else:
-            post_week(
-                os.environ["SLACK_BOT_TOKEN"], os.environ["SLACK_CHANNEL"], announcement, prompts
-            )
+            for message in messages:
+                post(os.environ["SLACK_BOT_TOKEN"], os.environ["SLACK_CHANNEL"], message)
+
+
+def cmd_post(args: argparse.Namespace) -> None:
+    """Post a one-off message, e.g. a reminder, to the book club channel."""
+    if args.dry_run:
+        print(args.text)
+    else:
+        post(os.environ["SLACK_BOT_TOKEN"], os.environ["SLACK_CHANNEL"], args.text)
 
 
 def main() -> None:
@@ -76,6 +84,11 @@ def main() -> None:
     slack.add_argument("--today", type=date.fromisoformat, default=TODAY)
     slack.add_argument("--dry-run", action="store_true")
     slack.set_defaults(func=cmd_slack)
+
+    one_off = sub.add_parser("post", help="post a one-off message to Slack")
+    one_off.add_argument("text")
+    one_off.add_argument("--dry-run", action="store_true")
+    one_off.set_defaults(func=cmd_post)
 
     args = parser.parse_args()
     args.func(args)
