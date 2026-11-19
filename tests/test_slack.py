@@ -40,17 +40,15 @@ def test_announcement_links_guide_and_each_prompt_becomes_a_thread():
     ]
 
 
-def test_release_day_posts_announcement_and_first_question_then_one_question_every_other_day():
+def test_release_day_posts_announcement_and_first_question_only():
     prompts = ["a?", "b?", "c?"]
 
     assert messages_for_day("hello", prompts, days_since_release=0) == [
         "hello",
         ":speech_balloon: *Q1.* a?",
     ]
-    assert messages_for_day("hello", prompts, days_since_release=2) == [":speech_balloon: *Q2.* b?"]
-    assert messages_for_day("hello", prompts, days_since_release=4) == [":speech_balloon: *Q3.* c?"]
-    assert messages_for_day("hello", prompts, days_since_release=1) == []
-    assert messages_for_day("hello", prompts, days_since_release=6) == []
+    for day in range(1, 7):
+        assert messages_for_day("hello", prompts, days_since_release=day) == []
 
 
 def test_markdown_links_in_prompts_become_slack_links():

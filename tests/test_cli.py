@@ -26,7 +26,7 @@ def test_build_falls_back_to_defaults_when_ci_passes_empty_variables(tmp_path):
     )
 
 
-def test_slack_dry_run_posts_the_second_question_on_wednesday():
+def test_slack_dry_run_posts_nothing_on_wednesday():
     result = subprocess.run(
         [
             sys.executable,
@@ -46,8 +46,7 @@ def test_slack_dry_run_posts_the_second_question_on_wednesday():
     )
 
     assert result.returncode == 0, result.stderr
-    assert result.stdout.strip().startswith(":speech_balloon: *Q2.*")
-    assert "Week 1" not in result.stdout
+    assert result.stdout.strip() == ""
 
 
 def test_post_dry_run_prints_the_text_without_posting():
